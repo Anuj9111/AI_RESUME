@@ -1,0 +1,72 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const connectDB = require('./config/db');
+
+const healthRoutes = require('./routes/healthRoutes');
+const authRoutes = require('./routes/authRoutes');
+const jobRoutes = require('./routes/jobRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const candidateRoutes = require('./routes/candidateRoutes');
+const applicationRoutes = require('./routes/applicationRoutes');
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Connect to MongoDB
+connectDB();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve uploaded resume documents statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Mount Routes
+app.use('/api/health', healthRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/candidates', candidateRoutes);
+app.use('/api/applications', applicationRoutes);
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    name: 'AI Resume Screener Backend API',
+    version: '1.0.0',
+    status: 'online',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth/*',
+      jobs: '/api/jobs/*',
+      dashboard: '/api/dashboard/stats',
+      candidates: '/api/candidates/:id',
+      applications: '/api/applications/:id/status'
+    }
+  });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err.stack);
+  res.status(500).json({
+    success: false,
+    message: 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
+
+// Start server if run directly
+let server;
+if (require.main === module) {
+  server = app.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    console.log(`Health check available at: http://localhost:${PORT}/api/health`);
+  });
+}
+
+module.exports = { app, server };
