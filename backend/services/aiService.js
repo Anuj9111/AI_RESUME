@@ -1,6 +1,9 @@
 const axios = require('axios');
 
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000';
+const rawAiUrl = (process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000').trim();
+const AI_SERVICE_URL = (rawAiUrl.startsWith('http://') || rawAiUrl.startsWith('https://'))
+  ? rawAiUrl.replace(/\/+$/, '')
+  : `https://${rawAiUrl.replace(/\/+$/, '')}`;
 
 /**
  * Invoke independent FastAPI microservice for explainable resume-job matching

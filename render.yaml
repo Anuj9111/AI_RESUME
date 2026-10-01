@@ -1,0 +1,37 @@
+services:
+  # -------------------------------------------------------------
+  # 1. Full-Stack Web Service (Node Express + Compiled React Vite)
+  # -------------------------------------------------------------
+  - type: web
+    name: ai-resume-screener-web
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false # Set this in the Render dashboard with your MongoDB Atlas URI
+      - key: AI_SERVICE_URL
+        fromService:
+          type: web
+          name: ai-resume-screener-ai
+          property: host
+
+  # -------------------------------------------------------------
+  # 2. Python FastAPI AI Semantic Matching Microservice
+  # -------------------------------------------------------------
+  - type: web
+    name: ai-resume-screener-ai
+    env: python
+    plan: free
+    region: oregon
+    rootDir: ai-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /

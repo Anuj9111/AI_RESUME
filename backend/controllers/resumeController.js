@@ -110,6 +110,8 @@ const uploadResumesForJob = async (req, res) => {
 
         const aiData = aiAnalysisResult.data;
 
+        const initialStatus = aiData.match_score > 90 ? 'Shortlisted' : (aiData.match_score < 30 ? 'Rejected' : 'New');
+
         // 5. Create or update Application with explainable AI match results
         let application = await Application.findOne({
           candidate: candidate._id,
@@ -124,7 +126,7 @@ const uploadResumesForJob = async (req, res) => {
             matchedSkills: aiData.matched_skills,
             missingSkills: aiData.missing_skills,
             explanation: aiData.explanation,
-            status: 'New',
+            status: initialStatus,
             aiAnalysis: {
               experienceAnalysis: aiData.experience_analysis,
               educationAnalysis: aiData.education_analysis,
@@ -138,6 +140,11 @@ const uploadResumesForJob = async (req, res) => {
           application.matchedSkills = aiData.matched_skills;
           application.missingSkills = aiData.missing_skills;
           application.explanation = aiData.explanation;
+          if (aiData.match_score > 90) {
+            application.status = 'Shortlisted';
+          } else if (aiData.match_score < 30) {
+            application.status = 'Rejected';
+          }
           application.aiAnalysis = {
             experienceAnalysis: aiData.experience_analysis,
             educationAnalysis: aiData.education_analysis,
@@ -382,6 +389,11 @@ const analyzeApplication = async (req, res) => {
     application.matchedSkills = aiData.matched_skills;
     application.missingSkills = aiData.missing_skills;
     application.explanation = aiData.explanation;
+    if (aiData.match_score > 90) {
+      application.status = 'Shortlisted';
+    } else if (aiData.match_score < 30) {
+      application.status = 'Rejected';
+    }
     application.aiAnalysis = {
       experienceAnalysis: aiData.experience_analysis,
       educationAnalysis: aiData.education_analysis,

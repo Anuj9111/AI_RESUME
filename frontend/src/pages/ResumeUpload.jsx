@@ -124,18 +124,6 @@ export default function ResumeUpload() {
     }
   };
 
-  // Generate lightweight mock PDF file for testing
-  const handleGenerateSampleResume = (candidateName, skills, expYears) => {
-    const streamContent = `BT /F1 12 Tf 72 712 Td (${candidateName}) Tj 0 -20 Td (Email: ${candidateName.toLowerCase().replace(' ', '.')}@example.com) Tj 0 -20 Td (Skills: ${skills}) Tj 0 -20 Td (Experience: ${expYears} years) Tj ET`;
-    const pdfData = `%PDF-1.4\n1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >> endobj\n4 0 obj << /Length ${streamContent.length} >> stream\n${streamContent}\nendstream\nendobj\n5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\nxref\n0 6\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000244 00000 n \n0000000350 00000 n \ntrailer << /Size 6 /Root 1 0 R >>\nstartxref\n450\n%%EOF`;
-
-    const blob = new Blob([pdfData], { type: 'application/pdf' });
-    const file = new File([blob], `${candidateName.replace(' ', '_')}_Resume.pdf`, {
-      type: 'application/pdf'
-    });
-    addFiles([file]);
-  };
-
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-white">
       {/* Top Header */}
@@ -298,42 +286,6 @@ export default function ResumeUpload() {
           </p>
         </div>
 
-        {/* Quick Demo Resumes Generator */}
-        <div className="mt-6 p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center space-x-2 text-xs text-slate-600 font-medium">
-            <Sparkles className="h-4 w-4 text-amber-500 shrink-0" />
-            <span>Don't have PDF files on hand? Attach pre-built test candidates:</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() =>
-                handleGenerateSampleResume(
-                  'Rahul Sharma',
-                  'React, Node.js, MongoDB, JavaScript, Express, Git',
-                  2
-                )
-              }
-              className="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-semibold transition"
-            >
-              + Rahul Sharma (High Match)
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                handleGenerateSampleResume(
-                  'Priya Singh',
-                  'Python, FastAPI, Docker, PostgreSQL, Linux',
-                  3
-                )
-              }
-              className="px-3 py-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-semibold transition"
-            >
-              + Priya Singh (Backend Match)
-            </button>
-          </div>
-        </div>
 
         {/* Selected Files Queue */}
         {files.length > 0 && (

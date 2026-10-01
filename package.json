@@ -1,0 +1,27 @@
+{
+  "name": "ai-resume-screener",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack AI Resume Screening and Candidate Shortlisting System",
+  "main": "backend/server.js",
+  "scripts": {
+    "install:backend": "npm --prefix backend install",
+    "install:frontend": "npm --prefix frontend install",
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm --prefix backend install && npm --prefix frontend install && npm --prefix frontend run build",
+    "start": "node backend/server.js",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "test": "npm --prefix backend run test:e2e"
+  },
+  "keywords": [
+    "ai",
+    "resume-screener",
+    "recruitment",
+    "nlp"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

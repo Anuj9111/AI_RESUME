@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Environment Variables
+.env
+.env.*
+backend/.env
+frontend/.env
+*.env.local
+
+# Python artifacts
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Frontend build outputs (except when deploying compiled)
+frontend/dist/
+frontend/dist-ssr/
+
+# Uploaded candidate resumes (ephemeral user data)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Logs and system
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
